@@ -5,14 +5,13 @@
 #include <time.h>
 #include "timezone.h"
 
-#define blank_pin       D6  // BLANK PIN - 74HC595
-#define latch_pin       D4  // LATCH PIN - 74HC595
-#define clock_pin       D5  // CLOCK PIN - 74HC595
-#define data_pin        D7  // DATA PIN - 74HC595
+#define blank_pin       D6  // BLANK PIN - TPIC6B595
+#define latch_pin       D4  // LATCH PIN - TPIC6B595
+#define clock_pin       D5  // CLOCK PIN - TPIC6B595
+#define data_pin        D7  // DATA PIN - TPIC6B595
 
 #define ROW0            D8
 #define ROW1            D0
-
 
 //MAPPING TO PORT
 
@@ -84,10 +83,10 @@ uint8_t R, G, B;
 #define myDPI     1.2732395
 #define myDPI2    0.40528473
 
-byte H0[4][2] = {{1, 0},{1, 1},{0, 1},{0, 0}};  // Ten digit
-byte H1[4][2] = {{1, 2},{1, 3},{0, 3},{0, 2}};  // Unit digit
-byte M0[4][2] = {{1, 4},{1, 5},{0, 5},{0, 4}};
-byte M1[4][2] = {{1, 6},{1, 7},{0, 7},{0, 6}};
+byte H0[4][2] = {{1, 0},{1, 1},{0, 1},{0, 0}};  // Hour - Ten digit
+byte H1[4][2] = {{1, 2},{1, 3},{0, 3},{0, 2}};  // Hour - Unit digit
+byte M0[4][2] = {{1, 4},{1, 5},{0, 5},{0, 4}};  // Minute - Ten digit
+byte M1[4][2] = {{1, 6},{1, 7},{0, 7},{0, 6}};  // Minute - Unit digit
 
 void LED(int X, int Y, int R, int G, int B);
 void timer1_ISR(void);
@@ -165,8 +164,7 @@ clearfast();
 }
 
 void loop()
-{  
-  
+{    
     struct tm *timeinfo;
     time(&now);
     timeinfo = localtime(&now);
@@ -281,7 +279,7 @@ switch (BAM_Bit)
 
 rowScan(row);
 
-digitalWrite(latch_pin, HIGH);    // Set LATCH PIN low - TPIC6B595
+digitalWrite(latch_pin, HIGH);    // Set LATCH PIN high - TPIC6B595
 delayMicroseconds(3);
 digitalWrite(latch_pin, LOW);     // Set LATCH PIN low - TPIC6B595
 delayMicroseconds(3);
@@ -290,7 +288,7 @@ delayMicroseconds(3);
 row++;
 if(row==2)
 row=0;
-timer1_write(100);     //Interrupt will be called every 60 x 0.2us = 12us
+timer1_write(100);     //Interrupt will be called every 100 x 0.2us = 20us
 pinMode(blank_pin, OUTPUT);
 }
 
